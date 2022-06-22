@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title><%= siteTitle+' | '+title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="https://via.placeholder.com/16/007bff/007bff" type="image/x-icon">
+  <script src="https://www.paypal.com/sdk/js?client-id=test&buyer-country=NL&disable-funding=credit,card,sofort">
+  </script>
+</head>
+
+<body>
+  <% include include/header.ejs %>
+
+  <div class="jumbotron text-center">
+    <% products.forEach(function(product, index) { %>
+    <h1><%= product.price %></h1>
+    <% }); %>
+    <!-- <h1>Checkout</h1> -->
+    <!-- <p>Resize this responsive page to see the effect!</p>  -->
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="name">Voornaam:</label>
+          <input type="text" class="form-control" id="name1" name="firstname">
+        </div>
+        <div class="form-group">
+          <label for="name">Achternaam:</label>
+          <input type="text" class="form-control" id="name2" name="lastname">
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" name="email">
+        </div>
+        <div class="form-group">
+          <label for="phone">Postcode:</label>
+          <input type="text" class="form-control" id="Postcode" name="Postcode">
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="address">Address:</label>
+          <input type="text" class="form-control" id="address" name="address">
+        </div>
+        <div class="form-group">
+          <label for="city">Stad:</label>
+          <input type="text" class="form-control" id="city" name="city">
+        </div>
+        <div class="form-group">
+          <label for="state">Provincie:</label><br>
+          <!-- <input type="text" class="form-control" id="state" name="state"> -->
+          <select name="Provincie" id="Provincie">
+            <option value="Limburg">Limburg</option>
+            <option value="Zeeland">Zeeland</option>
+            <option value="Noord-Holland">Noord-Holland</option>
+            <option value="Zuid-Holland">Zuid-Holland</option>
+            <option value="Utrecht">Utrecht</option>
+            <option value="Flevoland">Flevoland</option>
+            <option value="Friesland">Friesland</option>
+            <option value="Groningen">Groningen</option>
+            <option value="Drenthe">Drenthe</option>
+            <option value="Overijssel">Overijssel</option>
+            <option value="Gelderland">Gelderland</option>
+            <option value="Noord-Brabant">Noord-Brabant</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="country">Land:</label>
+          <input type="text" class="form-control" id="country" name="country">
+        </div>
+        <!-- <button type="submit" class="btn btn-primary" onclick="betaal()">Betaal</button> -->
+      </div>
+      <div class="col-md-7">
+        <div id="paypal-button-container" style="float: right;"></div>
+
+      <script>
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        var data = decodeURIComponent(readCookie('node_express_ecommerce')).slice(2)
+
+        var json = JSON.parse(data)
+        var price = 0
+
+        for (var i=0; i<json.length; i++){
+          price += json[i].price * json[i].qnt
+        }	
+
+        document.write(`<h4>Prijs: €${price}</h4>`)
+      </script>
+      </div>
+
+
+    </div>
+  </div>
+
+  <script>
+    paypal.Buttons().render('#paypal-button-container');
+  </script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="reload/reload.js"></script>
+
+
+
+</body>
+
+</html>

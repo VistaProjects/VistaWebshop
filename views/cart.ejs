@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title><%= siteTitle+' | '+title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="https://via.placeholder.com/16/007bff/007bff" type="image/x-icon">
+</head>
+
+<body>
+  <% include include/header.ejs %>
+
+  <div class="jumbotron text-center">
+    <h1>Winkelwagen</h1>
+    <!-- <p>Resize this responsive page to see the effect!</p> -->
+  </div>
+
+  <div class="container">
+    <form method="POST" action="/update-cart">
+      <% if(products.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product</th>
+              <th>Prijs</th>
+              <th>Hoeveelheid</th>
+              <th>Optie</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% products.forEach(function(product, index) { %> 
+            <tr>
+              <td><a class="text-body" href="/product/<%= product.pid %>"><img
+                    style="max-width: 100px; max-height: 50px;"
+                    src="http://172.16.128.127/images/<%= product.picture %>" /></a></td>
+              <td><a class="text-body" href="/product/<%= product.pid %>"><%= product.title %></a><br><span
+                  class="badge badge-warning"><%= product.name %></span></td>
+              <td>€<%= product.price %></td>
+              <td><input type="number" style="width: 100px;" min="1" name="qnt[]" value="<%= product.qnt %>" /></td>
+              <td><a href="/remove-from-cart/pid-<%= index %>">Verwijder</a></td>
+            </tr>
+            <% }); %>
+          </tbody>
+
+          
+        </table>
+      </div>
+      <div class="clearfix"></div>
+      <a href="/empty-cart" class="btn btn-danger float-left">Leeg winkelwagen</a>
+      <script>
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+      
+        var data = decodeURIComponent(readCookie('node_express_ecommerce')).slice(2)
+      
+        var json = JSON.parse(data)
+        var price = 0
+      
+        for (var i=0; i<json.length; i++){
+          price += json[i].price * json[i].qnt
+        }	
+      
+        document.write(`<a href="/checkout" class="btn btn-primary float-right">Checkout €${price}</a>`)
+      </script>
+      
+      
+      <button class="btn btn-success float-right" style="margin-right: 10px;">Update</button>
+      <div class="clearfix"></div>
+      
+    
+      <!-- [
+      {
+         "pid":1,
+         "title":"psu",
+         "name":"PSU",
+         "price":120,
+         "picture":"psu.jpg",
+         "qnt":"2"
+      },
+      {
+         "pid":2,
+         "title":"Intel i9-9900k",
+         "name":"CPU",
+         "price":139,
+         "picture":"i9 9900k.jpg",
+         "qnt":1
+      }
+   ] -->
+
+      <% } else { %>
+      <p>Winkelwagen is leeg.
+        <br>
+        <a href="/shop">Bekijk producten</a>
+      </p>
+      <% } %>
+    </form>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="reload/reload.js"></script>
+</body>
+
+</html>
